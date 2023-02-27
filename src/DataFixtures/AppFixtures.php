@@ -3,10 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
-use App\Entity\Product;
-use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -21,34 +18,13 @@ class AppFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        // foreach(range(1,3) as $i){
-        //     $user = new User();
-        //     $user
-        //         ->setUsername($faker->userName())
-        //         ->setPassword($this->hasher->hashPassword($user, '123'))
-        //         ->setRoles(['ROLE_MANAGER'])
-        //     ;
-        //     $manager->persist($user);
-        // }
-
-        // foreach(range(1,3) as $i){
-        //     $user = new User();
-        //     $user
-        //         ->setUsername($faker->userName())
-        //         ->setPassword($this->hasher->hashPassword($user, '123'))
-        //         ->setRoles(['ROLE_ADMIN'])
-        //     ;
-        //     $manager->persist($user);
-        // }
-
         foreach(range(1,3) as $i){
             $category = new Category();
             $category
-                ->setSlug($faker->slug())
+                ->setSlug($faker->slug(2))
                 ->setName($faker->realText(20))
             ;
             $manager->persist($category);
-            dump($category);
         }
 
         $manager->flush();

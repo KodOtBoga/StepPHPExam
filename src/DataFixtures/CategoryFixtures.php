@@ -10,7 +10,7 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class AppFixtures extends Fixture
+class CategoryFixtures extends Fixture
 {
     public function __construct(
         private UserPasswordHasherInterface $hasher,
@@ -31,12 +31,13 @@ class AppFixtures extends Fixture
                     ->setDescription($faker->text(100))
                     ->setPrice(rand(1000, 2000))
                     ->setAmount(rand(100, 200))
+                    ->setSlug($faker->slug(3))
                     ->setCategory($category)
                 ;
                 $manager->persist($product);
             }
             
-            }
+        }
 
         $manager->flush();
     }

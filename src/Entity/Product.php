@@ -27,7 +27,7 @@ class Product
     private ?string $description = null;
 
 
-    #[ORM\OneToOne(targetEntity: Category::class)]
+    #[ORM\ManyToOne(targetEntity: Category::class)]
     private ?Category $category = null;
     
     #[ORM\OneToOne(targetEntity: Image::class)]
@@ -36,7 +36,7 @@ class Product
 
     #[ORM\Column(unique: true)]
     #[Regex('/^[a-zA-Z\d\/]+$/')]
-    private ?int $slug;
+    private ?string $slug;
 
     #[ORM\Column] 
     private int $price;
@@ -84,11 +84,11 @@ class Product
 		return $this;
 	}
 
-	public function getSlug(): ?int {
+	public function getSlug(): ?string {
 		return $this->slug;
 	}
 	
-	public function setSlug(?int $slug): self {
+	public function setSlug(?string $slug): self {
 		$this->slug = $slug;
 		return $this;
 	}
