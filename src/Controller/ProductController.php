@@ -2,8 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
-use App\Form\CategoryType;
+use App\Entity\Product;
+use App\Form\ProductType;
+use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,51 +12,61 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CategoryController extends AbstractController
+class ProductController extends AbstractController
 {
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/category/create', name: 'category_create')]
+    #[Route('/product/{product}', name: 'product_view', requirements: ['product' => '\d+'], methods: ['GET'])]
+    public function view(
+        Product $product, 
+        ProductRepository $userRepository,
+    )
+    {
+        
+
+    }
+
+    #[IsGranted('ROLE_MANAGER')]
+    #[Route('/product/create', name: 'product_create')]
     public function Create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher)
     {
-        $category = new Category();
-        $form = $this->createForm(CategoryType::class, $category);
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $em->persist($category);
+                $em->persist($product);
                 $em->flush();
-                return $this->redirectToRoute('category_create');
+                return $this->redirectToRoute('product_create');
             }
         }
     }
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/chat/edit/{category}', name: 'category_edit', requirements: ['category' => '\d+'])]
-    public function edit(Category $category, Request $request, EntityManagerInterface $em)
+    #[IsGranted('ROLE_MANAGER')]
+    #[Route('/chat/edit/{product}', name: 'product_edit', requirements: ['product' => '\d+'])]
+    public function edit(Product $product, Request $request, EntityManagerInterface $em)
     {
-        $form = $this->createForm(CategoryType::class, $category);
+        $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $em->persist($category);
+            $em->persist($product);
             $em->flush();
-            return $this->redirectToRoute('category_create');
+            return $this->redirectToRoute('product_create');
         }
 
-        return $this->render('category_edit.html.twig', [
+        return $this->render('product_edit.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
 
-    #[IsGranted('ROLE_ADMIN')]
-    #[Route('/category/delete/{category}', name: 'category_delete', requirements: ['category' => '\d+'])]
-    public function Delete(Request $request, EntityManagerInterface $em, Category $category)
+    #[IsGranted('ROLE_MANAGER')]
+    #[Route('/product/delete/{product}', name: 'product_delete', requirements: ['product' => '\d+'])]
+    public function Delete(Request $request, EntityManagerInterface $em, Product $product)
     {
-        $em->remove($category);
+        $em->remove($product);
         $em->flush();
-        return $this->redirectToRoute('category_create');
+        return $this->redirectToRoute('product_create');
     }
 
 
