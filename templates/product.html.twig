@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    
+    <div class="product_item">
+                <div class="product_item_name">
+                {{ product.title }}
+                </div>
+                <div class="product_item_image">
+                {{ product.image ?? 'NO IMAGE'}}
+                </div>
+                <div class="product_item_price">
+                {{ product.price ?? 'FREE?'}}
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                <div class="product_item_delete">
+                <a class="btn btn-sm btn-danger remove_product"  href="{{ path('product_remove', {'product': product.id}) }}">Delete</a>
+                </div>
+                {% endif %}
+            </div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class = "market" style="display: flex; justify-content: start; flex-wrap: wrap; gap:50px;">
+        {% for product in products %}
+            <div class="market_item" style="border:1px solid black; margin:10px;">
+                <div class="market_item_name">
+                {{ product.title }}
+                </div>
+                <div class="market_item_image" style='width:150px; height:150px;'>
+                {% if product.image %}
+                <img src="{{ product.image ? product.image.path }}" style="height: 100%;
+   width: 100%;">
+                {% else %}
+                <span style = 'align:center'>'NO IMAGE'</span>
+                {% endif %}
+                </div>
+                <div class="market_item_price">
+                {{ product.price ?? 'FREE?'}}$
+                </div>
+                <div class="market_item_buttons" style="display: flex; justify-content: space-between;">
+                <div class="market_item_buy">
+                <a class="btn btn-sm btn-success add_product"  href="{{ path('product_add', {'product': product.id}) }}">Buy</a>
+                </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                <div class="market_item_delete">
+                <a class="btn btn-sm btn-danger delete_product"  href="{{ path('product_delete', {'product': product.id}) }}">Delete</a>
+                </div>
+                {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="market_item">No products yet</div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

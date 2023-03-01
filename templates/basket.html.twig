@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class = "basket">
+        {% for product in products %}
+            <div class="basket_item">
+                <div class="basket_item_name">
+                {{ product.title }}
+                </div>
+                <div class="basket_item_image">
+                {{ product.image ?? 'NO IMAGE'}}
+                </div>
+                <div class="basket_item_delete">
+                <a class="btn btn-sm btn-danger remove_product"  href="{{ path('product_remove', {'product': product.id}) }}">Delete</a>
+                </div>
+            </div>
+        {% else %}
+            <div class="basket_item">No products found.</div>
+        {% endfor %}
+    </div>
+    
+{% endblock %}

@@ -7,13 +7,16 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table('orderstate')]
-class OrderState {
+class OrderState 
+{
+	public const STATE_BASKET = 'basket'; 
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(targetEntity: Order::class, inversedBy:'orders')]
+    #[ORM\ManyToOne(targetEntity: Order::class)]
     private Order $order;
 
     #[ORM\Column]

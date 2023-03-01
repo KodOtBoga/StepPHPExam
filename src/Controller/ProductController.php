@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Order;
+use App\Entity\Image;
 use App\Entity\Product;
 use App\Form\ProductType;
+use App\Form\ProductEditType;
 use App\Repository\ProductRepository;
+use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,19 +18,22 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    #[Route('/product/{product}', name: 'product_view', requirements: ['product' => '\d+'], methods: ['GET'])]
+    #[Route('/products', name: 'product_view')]
     public function view(
-        Product $product, 
-        ProductRepository $userRepository,
+        ProductRepository $pr,
     )
     {
-        
+        $products = $pr->findNewProducts();
 
+
+        return $this->render('shop.html.twig', [
+            'products' => $products,
+        ]);
     }
 
     #[IsGranted('ROLE_MANAGER')]
     #[Route('/product/create', name: 'product_create')]
-    public function Create(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher)
+    public function Create(Request $request, EntityManagerInterface $em)
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -34,21 +41,48 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
+                if ($imageId = $form->get('image')->getData()) {
+                    $product->setImage($em->getRepository(Image::class)->find($imageId));
+                }
                 $em->persist($product);
                 $em->flush();
-                return $this->redirectToRoute('product_create');
+                return $this->redirectToRoute('product_view');
             }
         }
+
+        return $this->render('product_create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/user/basket/add/{product}', name: 'product_add', requirements: ['product' => '\d+'])]
+    public function addProduct(Product $product, EntityManagerInterface $em, OrderService $orderService)
+    {
+        $order = $orderService->getOrCreateBasket($this->getUser());
+        $order->getProducts()->add($product);
+        $em->persist($order);
+        $em->flush();
+    }
+
+    #[Route('/user/basket/remove/{product}', name: 'product_remove', requirements: ['product' => '\d+'])]
+    public function removeProduct(Product $product, Order $order, EntityManagerInterface $em){
+        
+        $order->getProducts()->removeElement($product);
+        $em->persist($order);
+        $em->flush();
     }
 
     #[IsGranted('ROLE_MANAGER')]
-    #[Route('/chat/edit/{product}', name: 'product_edit', requirements: ['product' => '\d+'])]
+    #[Route('/product/edit/{product}', name: 'product_edit', requirements: ['product' => '\d+'])]
     public function edit(Product $product, Request $request, EntityManagerInterface $em)
     {
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductEditType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
+            if ($imageId = $form->get('image')->getData()) {
+                $product->setImage($em->getRepository(Image::class)->find($imageId));
+            }
             $em->persist($product);
             $em->flush();
             return $this->redirectToRoute('product_create');

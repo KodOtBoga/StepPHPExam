@@ -2,32 +2,38 @@
 
 namespace App\Entity;
 
+use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Validator\Constraints\Regex;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table('orders')]
 class Order{
+
+	public const STATUS_BASKET = 'basket';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy:'users')]
     private User $user;
 
-    #[ORM\Column]
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'orders')]
     private Collection $products;
 
-    #[ORM\Column]
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'orders')]
+    #[ORM\OneToOne(targetEntity: OrderState::class)]
     private OrderState $orderState;
 
+	private string $status = self::STATUS_BASKET;
+
+	public function __construct()
+	{
+		$this->products = new ArrayCollection();
+	}
 
 	public function getId(): ?int {
 		return $this->id;
