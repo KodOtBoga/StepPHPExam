@@ -6,7 +6,9 @@
         {% for product in products %}
             <div class="market_item" style="border:1px solid black; margin:10px;">
                 <div class="market_item_name">
+                <a href = "/product/{{ product.id }}">
                 {{ product.title }}
+                </a>
                 </div>
                 <div class="market_item_image" style='width:150px; height:150px;'>
                 {% if product.image %}

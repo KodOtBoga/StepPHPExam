@@ -24,7 +24,6 @@ class OrderService
         if (!$order) {
             $order = new Order();
             $order->setUser($user)->setStatus(Order::STATUS_BASKET);
-            $order->setOrderState($orderState);
             $this->em->persist($order);
             $this->em->flush();
         }

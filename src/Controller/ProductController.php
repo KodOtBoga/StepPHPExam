@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    #[Route('/products', name: 'product_view')]
+    #[Route('/products', name: 'products_view')]
     public function view(
         ProductRepository $pr,
     )
@@ -28,6 +28,14 @@ class ProductController extends AbstractController
 
         return $this->render('shop.html.twig', [
             'products' => $products,
+        ]);
+    }
+
+    #[Route('/product/{product}', name: 'product_view', requirements: ['product' => '\d+'])]
+    public function viewProduct(Product $product, Request $request, EntityManagerInterface $em)
+    {
+        return $this->render('product.html.twig', [
+            'product' => $product,
         ]);
     }
 
@@ -62,14 +70,17 @@ class ProductController extends AbstractController
         $order->getProducts()->add($product);
         $em->persist($order);
         $em->flush();
+        return $this->redirectToRoute('app_view_basket');
     }
 
     #[Route('/user/basket/remove/{product}', name: 'product_remove', requirements: ['product' => '\d+'])]
-    public function removeProduct(Product $product, Order $order, EntityManagerInterface $em){
+    public function removeProduct(Product $product, EntityManagerInterface $em, OrderService $orderService){
         
+        $order = $orderService->getOrCreateBasket($this->getUser());
         $order->getProducts()->removeElement($product);
         $em->persist($order);
         $em->flush();
+        return $this->redirectToRoute('app_view_basket');
     }
 
     #[IsGranted('ROLE_MANAGER')]

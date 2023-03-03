@@ -21,9 +21,8 @@ class OrderRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('o');
         $qb
-            ->innerJoin('o.orderState', 'os')
             ->andWhere('o.user = :user')
-            ->andWhere('os.state = :basket')
+            ->andWhere('o.status = :basket')
             ->setParameter('basket', OrderState::STATE_BASKET)
             ->setParameter('user', $user)
             ->setMaxResults(1)

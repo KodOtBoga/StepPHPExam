@@ -18,16 +18,23 @@ class Payment
     private ?int $id = null;
 
 
-    #[ORM\Column]
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy:'users')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy:'payments')]
     private User $user;
 
-    #[ORM\Column]
-    private int $amount;
+    // #[ORM\Column]
+    // private ?int $amount = null;
 
-    #[ORM\Column]
+
     #[ORM\OneToOne(targetEntity: Order::class)]
     private Order $order;
+
+	#[ORM\Column]
+	private ?\DateTime $date = null;
+
+	public function __construct() 
+	{
+		$this->date = new \DateTime();
+    }
 
 	public function getId(): ?int {
 		return $this->id;
@@ -57,6 +64,22 @@ class Payment
 
 	public function setOrder(Order $order): self {
 		$this->order = $order;
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDate() {
+		return $this->date;
+	}
+	
+	/**
+	 * @param mixed $date 
+	 * @return self
+	 */
+	public function setDate($date): self {
+		$this->date = $date;
 		return $this;
 	}
 }

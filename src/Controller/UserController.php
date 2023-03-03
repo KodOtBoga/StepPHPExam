@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\EditType;
 use App\Form\RegisterType;
 use App\Repository\OrderRepository;
+use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,14 +57,15 @@ class UserController extends AbstractController
     }
 
     #[Route('/user/basket', name: 'app_view_basket')]
-    public function viewBasket(Request $request, OrderRepository $br)
+    public function viewBasket(Request $request, OrderService $br)
     {
         $user = $this->getUser();
-        $order = $br->findUsersBasket($user);
+        $order = $br->getOrCreateBasket($user);
+        $products = $order->getProducts();
  
 
         return $this->render('basket.html.twig', [
-            'products' => $order?->getProducts() ?: [],
+            'products' => $products,
         ]);
     }
 

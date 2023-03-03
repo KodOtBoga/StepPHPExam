@@ -3,21 +3,38 @@
 
 {% block body %}
     
-    <div class="product_item">
-                <div class="product_item_name">
-                {{ product.title }}
+            <div class="product_item" style="width: 700px;">
+                <div class="product_item_name" style="text-align:center;">
+                    {{ product.title }}
                 </div>
-                <div class="product_item_image">
-                {{ product.image ?? 'NO IMAGE'}}
+                <div class = "product_main" style="display: flex; justify-content: space-between;">
+                    <div class = "Product_image_price" style="width: 300px;">
+                        <div class="product_item_image">
+                            {% if product.image %}
+                                <img src="/{{ product.image ? product.image.path }}" style="height: 100%;
+                                width: 100%;">
+                            {% else %}
+                                <span>No Image</span>
+                            {% endif %}
+                        </div>
+                        <div class="product_item_price">
+                            {{ product.price ?? 'FREE?'}}
+                        </div>
+                    </div>
+                    <div class="product_item_description">
+                        {{ product.description }}
+                    </div>
                 </div>
-                <div class="product_item_price">
-                {{ product.price ?? 'FREE?'}}
-                </div>
+
                 {% if is_granted('ROLE_ADMIN') %}
-                <div class="product_item_delete">
-                <a class="btn btn-sm btn-danger remove_product"  href="{{ path('product_remove', {'product': product.id}) }}">Delete</a>
+                    <div class="market_item_buttons" style="display: flex; justify-content: space-between;">
+                        <div class="product_item_delete">
+                            <a class="btn btn-sm btn-danger remove_product"  href="{{ path('product_remove', {'product': product.id}) }}">Delete</a>
+                        </div>
+                    <div class="product_item_edit">
+                        <a class="btn btn-sm btn-success edit_product"  href="{{ path('product_edit', {'product': product.id}) }}">Edit</a>
+                    </div>
                 </div>
                 {% endif %}
             </div>
-
 {% endblock %}

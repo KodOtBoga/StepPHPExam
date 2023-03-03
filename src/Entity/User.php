@@ -35,10 +35,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Regex('/^.{3,180}$/')]
     private ?string $password = null;
 
-    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'users')]
+    #[ORM\OneToMany(targetEntity: Payment::class, mappedBy: 'user')]
     private Collection $payments;
 
-    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'users')]
+    #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'user')]
     private Collection $orders;
 
     private $plainPassword;

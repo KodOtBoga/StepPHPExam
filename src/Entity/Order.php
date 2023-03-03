@@ -19,15 +19,14 @@ class Order{
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy:'users')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy:'orders')]
     private User $user;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'orders')]
+    #[ORM\ManyToMany(targetEntity: Product::class)]
     private Collection $products;
 
-    #[ORM\OneToOne(targetEntity: OrderState::class)]
-    private OrderState $orderState;
-
+	
+    #[ORM\Column]
 	private string $status = self::STATUS_BASKET;
 
 	public function __construct()
@@ -57,12 +56,13 @@ class Order{
 		return $this;
 	}
 
-	public function getOrderState(): OrderState {
-		return $this->orderState;
+	public function getStatus(): string {
+		return $this->status;
 	}
 
-	public function setOrderState(OrderState $orderState): self {
-		$this->orderState = $orderState;
+	public function setStatus(string $status): self {
+		$this->status = $status;
 		return $this;
 	}
+
 }

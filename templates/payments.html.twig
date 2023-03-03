@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="payments">
+        {% if payments %}
+            {% for payment in payments %}
+                <div class="payment" style="border: 1px solid black; display: flex; justify-content: space-between;">
+                    <div class="payment_id">
+                        <p>Payment ID</p>
+                        {{ payment.id }}
+                    </div>
+                    <div class="order_id">
+                     <p>Order ID</p>
+                        <a href="{{ path('order_view', {'order': payment.order.id}) }}">
+                            {{ payment.order.status }}
+                        </a>
+                    </div>
+                    <div class="payment_time">
+                     <p>Date</p>
+                            {{ payment.date|date('Y-m-d H:i') }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div>No payments</div>
+        {% endif %}
+    </div>
+            
+{% endblock %}
