@@ -2,7 +2,6 @@
 
 namespace App\Service;
 use App\Entity\Order;
-use App\Entity\OrderState;
 use App\Entity\User;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;

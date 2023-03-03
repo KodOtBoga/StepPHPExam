@@ -5,8 +5,6 @@ namespace App\Entity;
 use App\Entity\User;
 use App\Entity\Order;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints\Regex;
 
 #[ORM\Entity]
 #[ORM\Table('payments')]

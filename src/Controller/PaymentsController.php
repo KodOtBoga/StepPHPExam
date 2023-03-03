@@ -7,7 +7,6 @@ use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Order;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PaymentsController extends AbstractController

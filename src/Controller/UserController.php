@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Image;
 use App\Entity\User;
 use App\Form\EditType;
 use App\Form\RegisterType;
-use App\Repository\OrderRepository;
 use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

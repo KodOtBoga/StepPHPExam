@@ -5,7 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints\Regex;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table('categories')]
