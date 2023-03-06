@@ -4,21 +4,7 @@
     {{ form_start(form) }}
         {{ form_row(form.username) }}
         {{ form_row(form.plainPassword) }}
-        {# <div class="mb-3">
-            <label class="btn btn-primary" for="upload-image">Upload Image</label>
-            <input type="file" class="upload-image" id="upload-image" style="display:none;">
-            {% if user %}
-              <img src="
-                {% if user.image %}
-                  /{{ user.image.path }}
-                {% else %}
-                  https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp
-                {% endif %}
-                "
-                alt="avatar 1" style="width: 45px; height: 45px;">
-          {% endif %} #}
-        </div>
-
+        {{ form_row(form.roles) }}
         {{ form_row(form.edit)}}
     {{ form_end(form) }}
 {% endblock %}

@@ -18,6 +18,7 @@ class EditType extends AbstractType
                 'required' => false,
                 'label' => 'Password',
             ])
+            ->add('roles'[0])
             ->add('edit', SubmitType::class, [
                 'attr' => [
                     'class' => 'btn btn-success',

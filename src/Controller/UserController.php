@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\EditType;
 use App\Form\RegisterType;
+use App\Repository\UserRepository;
 use App\Service\OrderService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,6 +16,19 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class UserController extends AbstractController
 {
+    #[Route('/users', name: 'users_view')]
+    public function users_view(
+        UserRepository $ur,
+    )
+    {
+        $users = $ur->findAllExcept($this->getUser());
+
+        return $this->render('users.html.twig', [
+            'users' => $users,
+        ]);
+    }
+
+
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher)
     {
@@ -27,7 +41,7 @@ class UserController extends AbstractController
                 $user->setPassword($hasher->hashPassword($user, $user->getPassword()));
                 $em->persist($user);
                 $em->flush();
-                return $this->redirectToRoute('app_homepage');
+                return $this->redirectToRoute('products_view');
             }
         }
 
@@ -68,10 +82,9 @@ class UserController extends AbstractController
     }
 
 
-    #[Route('/user/edit', name: 'app_edit_user')]
-    public function editUser(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher)
+    #[Route('/user/edit/{user}', name: 'app_edit_user', requirements: ['product' => '\d+'])]
+    public function editUser(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $hasher, User $user)
     {
-        $user = $this->getUser();
         $form = $this->createForm(EditType::class, $user);
         $form->handleRequest($request);
 
@@ -81,7 +94,7 @@ class UserController extends AbstractController
             }
             $em->persist($user);
             $em->flush();
-            return $this->redirectToRoute('app_edit_user');
+            return $this->redirectToRoute('users_view');
         }
 
         return $this->render('profile.html.twig', [
@@ -89,4 +102,13 @@ class UserController extends AbstractController
             'user' => $user,
         ]);
     }
+
+    #[Route('/user/delete/{user}', name: 'app_delete_user', requirements: ['product' => '\d+'])]
+    public function deleteUser(Request $request, EntityManagerInterface $em, User $user)
+    {
+        $em->remove($user);
+        $em->flush();
+        return $this->redirectToRoute('users_view');
+    }
+
 }

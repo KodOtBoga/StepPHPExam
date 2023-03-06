@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <ul>
+        {% for user in users %}
+        <li>
+            <div style = "display:flex;justify-content: space-between; padding:10px;">
+            <div>
+                    {{ user.id }}
+                </div>
+                <div>
+                    {{ user.username }}
+                </div>
+                <div>
+                    {{ user.roles[0] }}
+                </div>
+                <div>
+                    <a class="btn btn-sm btn-success edit_user"  href="{{ path('app_edit_user', {'user': user.id}) }}">Edit</a>
+                    <a class="btn btn-sm btn-danger delete_user"  href="{{ path('app_delete_user', {'user': user.id}) }}">delete</a>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
